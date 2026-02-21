@@ -1,0 +1,1454 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pontos do Grupo</title>
+
+  <!-- "Closest" public alternative + tries Google Sans/Product Sans if available on device -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --black:#000000;
+      --purple:#7D39EB;
+      --lime:#C6FF33;
+      --white:#FFFFFF;
+
+      --radius:20px;
+      --radius2:16px;
+      --shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: "Google Sans","Product Sans","Inter",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
+      background: var(--black);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .app{
+      max-width: 420px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display:flex;
+      flex-direction:column;
+      padding-bottom: 98px; /* space for bottom nav */
+    }
+
+    .header{
+      padding: 18px 16px 10px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .hello{ display:flex; flex-direction:column; gap:2px; }
+    .hello .title{
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      margin:0;
+      line-height:1.1;
+    }
+    .hello .subtitle{
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+      margin:0;
+    }
+    .avatar{
+      width: 42px; height: 42px; border-radius: 999px;
+      background: radial-gradient(120% 120% at 30% 20%, var(--lime), var(--purple));
+      box-shadow: var(--shadow);
+      border: 2px solid var(--white);
+      display:grid; place-items:center;
+      color: var(--black);
+      font-weight: 900;
+      flex: 0 0 auto;
+      overflow:hidden;
+    }
+    .avatar img{
+      width:100%; height:100%; object-fit:cover; display:block;
+    }
+
+    .content{
+      padding: 0 16px 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+
+    /* Cards */
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Home podium */
+    .podium{
+      background: linear-gradient(160deg, rgba(125,57,235,.35), rgba(198,255,51,.14));
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .podiumRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .podCard{
+      border-radius: 18px;
+      border: 2px solid var(--purple);
+      background: rgba(255,255,255,.06);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      min-height: 110px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .podCard.top1{
+      border-color: var(--lime);
+      background: rgba(198,255,51,.12);
+      transform: translateY(-6px);
+    }
+    .podPos{
+      font-weight: 900;
+      letter-spacing: .4px;
+      font-size: 12px;
+      color: rgba(255,255,255,.9);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .podName{
+      font-weight: 900;
+      font-size: 14px;
+      line-height:1.1;
+      word-break: break-word;
+    }
+    .podPoints{
+      margin-top:auto;
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: var(--purple);
+      color: var(--white);
+      font-weight: 900;
+      font-size: 13px;
+      text-align:center;
+    }
+    .podCard.top1 .podPoints{
+      background: var(--lime);
+      color: var(--black);
+    }
+
+    .rankBars{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .barCard{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .barLeft{ min-width:0; display:flex; flex-direction:column; gap:2px; }
+    .barPos{ font-weight: 900; font-size: 12px; color: rgba(255,255,255,.8); }
+    .barName{
+      font-weight: 900;
+      font-size: 13px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .barPts{ font-weight: 900; font-size: 13px; color: var(--lime); }
+
+    /* Event (view only on home, edit on Leader) */
+    .nextEvent{
+      border-radius: var(--radius);
+      border: 2px solid rgba(125,57,235,.7);
+      background: rgba(125,57,235,.14);
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .nextEvent .label{
+      font-weight: 900;
+      letter-spacing:.6px;
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      text-transform: uppercase;
+    }
+    .nextEventBox{
+      margin-top: 10px;
+      border-radius: 18px;
+      border: 2px dashed rgba(198,255,51,.8);
+      background: rgba(0,0,0,.35);
+      padding: 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .nextEventMain{ min-width:0; display:flex; flex-direction:column; gap:6px; }
+    .eventName{
+      font-weight: 900;
+      font-size: 16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .eventMeta{ font-size: 12px; color: rgba(255,255,255,.75); }
+    .daysPill{
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: var(--lime);
+      color: var(--black);
+      font-weight: 900;
+      min-width: 92px;
+      text-align:center;
+      flex:0 0 auto;
+    }
+
+    /* Form */
+    .panelTitle{ margin:0; font-size: 14px; font-weight: 900; letter-spacing:.3px; }
+    .panelSub{ margin:6px 0 0; font-size: 12px; color: rgba(255,255,255,.75); }
+
+    .form{ margin-top: 12px; display:flex; flex-direction:column; gap: 10px; }
+    label{ font-size: 12px; font-weight: 900; letter-spacing:.3px; color: rgba(255,255,255,.9); }
+
+    input, select, button{
+      width:100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 12px 12px;
+      font-size: 14px;
+      background: rgba(0,0,0,.35);
+      color: var(--white);
+      outline:none;
+    }
+    input::placeholder{ color: rgba(255,255,255,.45); }
+    select{ cursor:pointer; }
+
+    button{
+      cursor:pointer;
+      border: none;
+      background: var(--lime);
+      color: var(--black);
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+    button.secondary{ background: var(--purple); color: var(--white); }
+    button.ghost{
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    .hint{
+      font-size: 12px;
+      color: rgba(255,255,255,.85);
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.2);
+    }
+    .warn{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--black);
+      background: var(--lime);
+      border-radius: 16px;
+      padding: 10px 12px;
+    }
+    .hide{ display:none; }
+
+    /* Lists */
+    .list{ display:flex; flex-direction:column; gap: 10px; margin-top: 12px; }
+    .li{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .li .left{ min-width:0; display:flex; flex-direction:column; gap:3px; }
+    .li .t{
+      font-weight: 900;
+      font-size: 13px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .li .m{
+      font-size: 12px;
+      color: rgba(255,255,255,.7);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .chip{
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 900;
+      background: var(--purple);
+      color: var(--white);
+      white-space:nowrap;
+    }
+    .chip.lime{ background: var(--lime); color: var(--black); }
+
+    .tiny{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,.85);
+      text-decoration: underline;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    /* Launch step 1: choose member grid */
+    .memberGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .memberTile{
+      border-radius: 18px;
+      border: 2px solid rgba(125,57,235,.8);
+      background: rgba(255,255,255,.06);
+      padding: 14px 12px;
+      cursor:pointer;
+      user-select:none;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap: 10px;
+      text-align:center;
+    }
+    .memberTile.active{
+      border-color: var(--lime);
+      background: rgba(198,255,51,.12);
+    }
+    .memberPic{
+      width:64px; height:64px; border-radius:999px;
+      border:2px solid var(--white);
+      background: radial-gradient(120% 120% at 30% 20%, var(--lime), var(--purple));
+      overflow:hidden;
+      display:grid;
+      place-items:center;
+      color: var(--black);
+      font-weight: 900;
+    }
+    .memberPic img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .memberTile .n{ font-weight: 900; }
+    .memberTile .p{ font-weight: 900; color: var(--lime); font-size: 13px; }
+
+    /* Launch step 2: cart */
+    .cartRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      padding: 12px;
+    }
+    .cartLeft{ min-width:0; display:flex; flex-direction:column; gap:3px; }
+    .cartName{ font-weight: 900; font-size: 13px; }
+    .cartPts{ font-size: 12px; color: rgba(255,255,255,.75); }
+    .qty{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+    .qtyBtn{
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.35);
+      color: var(--white);
+      font-weight: 900;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .qtyBtn.plus{ background: var(--purple); border-color: transparent; }
+    .qtyVal{
+      min-width: 26px;
+      text-align:center;
+      font-weight: 900;
+    }
+    .summaryGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .summaryBox{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      padding: 12px;
+    }
+    .summaryLabel{ font-size: 12px; color: rgba(255,255,255,.7); font-weight: 800; }
+    .summaryValue{ margin-top:6px; font-weight: 900; font-size: 16px; }
+
+    /* Bottom nav */
+    .bottomNav{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 14px;
+      width: min(420px, calc(100% - 24px));
+      background: rgba(125,57,235,.22);
+      border: 1px solid rgba(255,255,255,.16);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 999px;
+      padding: 10px;
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      box-shadow: var(--shadow);
+    }
+    .navBtn{
+      border-radius: 999px;
+      padding: 10px 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.35);
+      color: var(--white);
+      font-weight: 900;
+      font-size: 11px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .navBtn.active{
+      background: var(--lime);
+      color: var(--black);
+      border-color: transparent;
+    }
+    .dot{ width:10px;height:10px;border-radius:999px;background: currentColor; opacity: .9; }
+
+    /* Small helper */
+    .rowBetween{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="hello">
+        <p class="title" id="helloTitle">Olá, user!</p>
+        <p class="subtitle" id="helloSub">Seu placar do grupo</p>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+
+    <div class="content">
+      <!-- HOME -->
+      <section id="view-home">
+        <div class="podium">
+          <div class="podiumRow" id="podiumRow"></div>
+          <div class="rankBars" id="rankBars"></div>
+        </div>
+
+        <div class="nextEvent">
+          <div class="label">Próximo evento</div>
+          <div class="nextEventBox">
+            <div class="nextEventMain">
+              <div class="eventName" id="eventName">XXX</div>
+              <div class="eventMeta" id="eventMeta">Defina a data do próximo evento</div>
+            </div>
+            <div class="daysPill" id="eventDays">— dias</div>
+          </div>
+          <div class="hint" style="margin-top:12px">
+            Para editar o evento, vá em <b>Líder</b>.
+          </div>
+        </div>
+      </section>
+
+      <!-- LANÇAR (2 etapas) -->
+      <section id="view-lancar" class="hide">
+        <!-- Step 1 -->
+        <div class="card" id="launchStep1">
+          <p class="panelTitle">Selecione o membro</p>
+          <p class="panelSub">Escolha quem vai receber os pontos</p>
+          <div class="memberGrid" id="memberGrid"></div>
+          <div style="height:12px"></div>
+          <button id="btnGoCart" class="secondary">Continuar</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card hide" id="launchStep2">
+          <div class="rowBetween">
+            <div>
+              <p class="panelTitle" id="cartTitle">Carrinho</p>
+              <p class="panelSub" id="cartSub">Escolha quantidades por categoria</p>
+            </div>
+            <button class="ghost" id="btnBackToMembers" style="max-width:120px">Voltar</button>
+          </div>
+
+          <div class="hint" id="cartTargetHint" style="margin-top:12px"></div>
+
+          <div class="list" id="cartList"></div>
+
+          <div class="summaryGrid">
+            <div class="summaryBox">
+              <div class="summaryLabel">Total a adicionar</div>
+              <div class="summaryValue" id="sumAdd">0</div>
+            </div>
+            <div class="summaryBox">
+              <div class="summaryLabel">Saldo final</div>
+              <div class="summaryValue" id="sumFinal">0</div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+          <label>Observação (opcional)</label>
+          <input id="inpLaunchNote" placeholder="Ex.: pontos do rolê / punição..." />
+
+          <div style="height:12px"></div>
+          <button id="btnConfirmLaunch">Confirmar</button>
+        </div>
+
+        <!-- Histórico de lançamentos (dentro de Lançar) -->
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Histórico de lançamentos</p>
+          <p class="panelSub">Quem lançou, categorias, pontos e data/hora</p>
+          <div class="list" id="launchHistoryList"></div>
+        </div>
+      </section>
+
+      <!-- LOJA -->
+      <section id="view-loja" class="hide">
+        <div class="card">
+          <p class="panelTitle">Loja</p>
+          <p class="panelSub">Troque pontos por itens</p>
+
+          <div class="form">
+            <label>Membro</label>
+            <select id="selShopMember"></select>
+
+            <label>Item</label>
+            <select id="selShopItem"></select>
+
+            <label>Observação (opcional)</label>
+            <input id="inpShopNote" placeholder="Ex.: escolheu filme / ganhou sobremesa..." />
+
+            <div class="hint" id="shopPreview">Prévia: —</div>
+            <div class="warn hide" id="shopWarn"></div>
+
+            <button id="btnBuy">Comprar (descontar pontos)</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Itens da loja</p>
+          <p class="panelSub">Cadastre itens (qualquer um pode)</p>
+
+          <div class="form">
+            <label>Nome do item</label>
+            <input id="inpItemName" placeholder="Ex.: Escolher filme" />
+            <label>Custo (pontos)</label>
+            <input id="inpItemCost" placeholder="Ex.: 20" inputmode="numeric" />
+            <button class="secondary" id="btnAddItem">Adicionar item</button>
+          </div>
+
+          <div class="list" id="shopItemsList"></div>
+        </div>
+      </section>
+
+      <!-- AJUSTES (pessoais) -->
+      <section id="view-ajustes" class="hide">
+        <div class="card">
+          <p class="panelTitle">Ajustes</p>
+          <p class="panelSub">Todo mundo pode mexer: nome e foto do próprio perfil</p>
+
+          <div class="form">
+            <label>Meu perfil</label>
+            <select id="selMyProfile"></select>
+
+            <label>Meu nome</label>
+            <input id="inpMyName" placeholder="Seu nome" />
+
+            <label>Minha foto</label>
+            <input id="inpMyPhoto" type="file" accept="image/*" />
+
+            <button class="secondary" id="btnSaveMyProfile">Salvar</button>
+          </div>
+
+          <div class="hint" style="margin-top:12px">
+            Isso altera seu avatar no app (salvo localmente).
+          </div>
+        </div>
+      </section>
+
+      <!-- LÍDER (categorias + evento + líder da rodada) -->
+      <section id="view-lider" class="hide">
+        <div class="card">
+          <p class="panelTitle">Líder</p>
+          <p class="panelSub">Apenas o líder da rodada deve editar categorias, pontos e evento</p>
+
+          <div class="form">
+            <label>Líder da rodada</label>
+            <select id="selLeader"></select>
+            <div class="hint">
+              Controle local: selecione quem é o líder. (Se quiser PIN/senha, eu adiciono.)
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Evento</p>
+          <p class="panelSub">Editar nome e data do próximo evento</p>
+
+          <div class="form">
+            <label>Nome do evento</label>
+            <input id="inpEventName" placeholder="Ex.: Churrasco / Cinema" />
+            <label>Data do evento</label>
+            <input id="inpEventDate" type="date" />
+            <button class="secondary" id="btnSaveEvent">Salvar evento</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Categorias (ações)</p>
+          <p class="panelSub">Editar lista e pontos por unidade</p>
+
+          <div class="form">
+            <label>Nova categoria</label>
+            <input id="inpActionLabel" placeholder="Ex.: Categoria 1" />
+            <label>Pontos por unidade</label>
+            <input id="inpActionPoints" placeholder="Ex.: 5 ou -10" inputmode="numeric" />
+            <button class="secondary" id="btnAddAction">Adicionar categoria</button>
+          </div>
+
+          <div class="list" id="actionsList"></div>
+
+          <div style="height:10px"></div>
+          <button id="btnReset" class="ghost">
+            Zerar tudo (membros, categorias, loja e histórico)
+          </button>
+        </div>
+      </section>
+
+      <!-- HISTÓRICO GERAL -->
+      <section id="view-historico" class="hide">
+        <div class="card">
+          <p class="panelTitle">Histórico</p>
+          <p class="panelSub">Tudo (lançamentos + compras)</p>
+          <div class="list" id="ledgerList"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="bottomNav" id="bottomNav">
+    <div class="navBtn active" data-view="home"><span class="dot"></span>Home</div>
+    <div class="navBtn" data-view="lancar"><span class="dot"></span>Lançar</div>
+    <div class="navBtn" data-view="loja"><span class="dot"></span>Loja</div>
+    <div class="navBtn" data-view="ajustes"><span class="dot"></span>Ajustes</div>
+    <div class="navBtn" data-view="lider"><span class="dot"></span>Líder</div>
+  </nav>
+
+  <script>
+    // ---------------------------
+    // State + storage
+    // ---------------------------
+    const KEY = "pontos_do_grupo_v4";
+
+    const uid = () => Math.random().toString(16).slice(2) + Date.now().toString(16);
+
+    function defaultState(){
+      const members = [
+        { id: uid(), name: "Gabriel",  points: 175, photoDataUrl: "" },
+        { id: uid(), name: "Vinicius", points: 225, photoDataUrl: "" },
+        { id: uid(), name: "Cristian", points: 130, photoDataUrl: "" },
+        { id: uid(), name: "Bueno",    points: 130, photoDataUrl: "" },
+        { id: uid(), name: "Paulo",    points: 135, photoDataUrl: "" },
+      ];
+
+      // categories (actions)
+      const actions = [
+        { id: uid(), label: "Categoria 1", points: 10 },
+        { id: uid(), label: "Categoria 2", points: 5 },
+        { id: uid(), label: "Categoria 3", points: -3 },
+        { id: uid(), label: "Categoria 4", points: 2 },
+      ];
+
+      const shop = [
+        { id: uid(), name: "Escolher o filme", cost: 20 },
+        { id: uid(), name: "Escolher a música", cost: 10 },
+        { id: uid(), name: "Pizza paga pelo grupo", cost: 50 },
+      ];
+
+      const event = { name: "XXX", date: "" };
+
+      // who is leader of the round (memberId)
+      const leaderId = members[0].id;
+
+      // ledger items:
+      // - type: "launch" (cart) or "shop"
+      // launch: includes breakdown: [{actionId,label,unitPoints,qty,subtotal}]
+      const ledger = [];
+
+      return { members, actions, shop, ledger, event, leaderId };
+    }
+
+    function load(){
+      try{
+        const raw = localStorage.getItem(KEY);
+        if(!raw) return null;
+        return JSON.parse(raw);
+      }catch{ return null; }
+    }
+    function save(s){ localStorage.setItem(KEY, JSON.stringify(s)); }
+
+    // recompute points from initial + ledger? We keep member.points as source-of-truth for simplicity.
+    // However: we still store ledger for history and adjust points on confirm.
+    function esc(s){ return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+    function fmtPts(n){ return (n >= 0 ? "+" : "") + n; }
+
+    let state = load();
+    if(!state){ state = defaultState(); save(state); }
+    if(!state.shop) state.shop = [];
+    if(!state.actions) state.actions = [];
+    if(!state.members) state.members = [];
+    if(!state.ledger) state.ledger = [];
+    if(!state.event) state.event = { name:"XXX", date:"" };
+    if(!state.leaderId) state.leaderId = state.members[0]?.id || "";
+
+    // ---------------------------
+    // Elements
+    // ---------------------------
+    const $ = (q) => document.querySelector(q);
+    const $$ = (q) => Array.from(document.querySelectorAll(q));
+
+    // views
+    const views = {
+      home: $("#view-home"),
+      lancar: $("#view-lancar"),
+      loja: $("#view-loja"),
+      ajustes: $("#view-ajustes"),
+      lider: $("#view-lider"),
+      historico: $("#view-historico"),
+    };
+
+    // header
+    const helloTitle = $("#helloTitle");
+    const avatar = $("#avatar");
+
+    // home
+    const podiumRow = $("#podiumRow");
+    const rankBars = $("#rankBars");
+    const eventName = $("#eventName");
+    const eventMeta = $("#eventMeta");
+    const eventDays = $("#eventDays");
+
+    // launch
+    const launchStep1 = $("#launchStep1");
+    const launchStep2 = $("#launchStep2");
+    const memberGrid = $("#memberGrid");
+    const btnGoCart = $("#btnGoCart");
+    const btnBackToMembers = $("#btnBackToMembers");
+    const cartTargetHint = $("#cartTargetHint");
+    const cartList = $("#cartList");
+    const sumAdd = $("#sumAdd");
+    const sumFinal = $("#sumFinal");
+    const inpLaunchNote = $("#inpLaunchNote");
+    const btnConfirmLaunch = $("#btnConfirmLaunch");
+    const launchHistoryList = $("#launchHistoryList");
+
+    // shop
+    const selShopMember = $("#selShopMember");
+    const selShopItem = $("#selShopItem");
+    const inpShopNote = $("#inpShopNote");
+    const shopPreview = $("#shopPreview");
+    const shopWarn = $("#shopWarn");
+    const btnBuy = $("#btnBuy");
+    const inpItemName = $("#inpItemName");
+    const inpItemCost = $("#inpItemCost");
+    const btnAddItem = $("#btnAddItem");
+    const shopItemsList = $("#shopItemsList");
+
+    // ajustes
+    const selMyProfile = $("#selMyProfile");
+    const inpMyName = $("#inpMyName");
+    const inpMyPhoto = $("#inpMyPhoto");
+    const btnSaveMyProfile = $("#btnSaveMyProfile");
+
+    // líder
+    const selLeader = $("#selLeader");
+    const inpEventName = $("#inpEventName");
+    const inpEventDate = $("#inpEventDate");
+    const btnSaveEvent = $("#btnSaveEvent");
+    const inpActionLabel = $("#inpActionLabel");
+    const inpActionPoints = $("#inpActionPoints");
+    const btnAddAction = $("#btnAddAction");
+    const actionsList = $("#actionsList");
+    const btnReset = $("#btnReset");
+
+    // history
+    const ledgerList = $("#ledgerList");
+
+    // nav
+    const bottomNav = $("#bottomNav");
+
+    // ---------------------------
+    // Helpers
+    // ---------------------------
+    function memberById(id){ return state.members.find(m => m.id === id); }
+    function actionById(id){ return state.actions.find(a => a.id === id); }
+    function pointsOf(memberId){ const m = memberById(memberId); return m ? (m.points || 0) : 0; }
+
+    function isLeaderSelected(){
+      // In a real multi-user app, you'd check "current user".
+      // Here we treat selected "Meu perfil" as the current user.
+      const meId = selMyProfile.value || state.members[0]?.id || "";
+      return meId && meId === state.leaderId;
+    }
+
+    // ---------------------------
+    // Navigation
+    // ---------------------------
+    function show(view){
+      Object.keys(views).forEach(k => views[k].classList.toggle("hide", k !== view));
+      $$("#bottomNav .navBtn").forEach(btn => btn.classList.toggle("active", btn.dataset.view === view));
+
+      // When entering "Líder", warn if not leader
+      if(view === "lider"){
+        const leader = memberById(state.leaderId);
+        const me = memberById(selMyProfile.value || state.members[0]?.id || "");
+        if(me && leader && me.id !== leader.id){
+          alert(`Atenção: o líder da rodada é ${leader.name}. (Controle local)`);
+        }
+      }
+    }
+
+    bottomNav.addEventListener("click", (e) => {
+      const btn = e.target.closest(".navBtn");
+      if(!btn) return;
+      show(btn.dataset.view);
+    });
+
+    // ---------------------------
+    // Render
+    // ---------------------------
+    function renderHeader(){
+      const first = state.members[0]?.name || "user";
+      helloTitle.textContent = `Olá, ${first}!`;
+
+      // avatar uses "me" if selected; else first
+      const meId = selMyProfile?.value || state.members[0]?.id;
+      const me = memberById(meId) || state.members[0];
+      avatar.innerHTML = "";
+      if(me?.photoDataUrl){
+        const img = document.createElement("img");
+        img.src = me.photoDataUrl;
+        img.alt = me.name;
+        avatar.appendChild(img);
+      }else{
+        avatar.textContent = (me?.name?.[0] || "U").toUpperCase();
+      }
+    }
+
+    function renderPodium(){
+      const sorted = [...state.members].sort((a,b) => (b.points||0) - (a.points||0));
+      const top3 = [sorted[0], sorted[1], sorted[2]];
+
+      podiumRow.innerHTML = top3.map((m, idx) => {
+        const pos = idx + 1;
+        const topClass = pos === 1 ? "top1" : "";
+        const badge = pos === 1 ? "🥇" : (pos === 2 ? "🥈" : "🥉");
+        return `
+          <div class="podCard ${topClass}" data-open-member="${m?.id || ""}">
+            <div class="podPos"><span>${pos}º</span><span>${badge}</span></div>
+            <div class="podName">${esc(m?.name || "—")}</div>
+            <div class="podPoints">${fmtPts(m?.points || 0)} pts</div>
+          </div>
+        `;
+      }).join("");
+
+      const bar4 = sorted[3];
+      const bar5 = sorted[4];
+
+      function barTemplate(m, pos){
+        return `
+          <div class="barCard" data-open-member="${m?.id || ""}">
+            <div class="barLeft">
+              <div class="barPos">${pos}º</div>
+              <div class="barName">${esc(m?.name || "—")}</div>
+            </div>
+            <div class="barPts">${fmtPts(m?.points || 0)}</div>
+          </div>
+        `;
+      }
+      rankBars.innerHTML = barTemplate(bar4, 4) + barTemplate(bar5, 5);
+    }
+
+    function renderEvent(){
+      const name = state.event?.name || "XXX";
+      const date = state.event?.date || "";
+      eventName.textContent = name || "XXX";
+
+      if(!date){
+        eventMeta.textContent = "Defina a data do próximo evento";
+        eventDays.textContent = "— dias";
+        return;
+      }
+
+      const d = new Date(date + "T00:00:00");
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const diffMs = d.getTime() - today.getTime();
+      const diffDays = Math.ceil(diffMs / (1000*60*60*24));
+
+      eventMeta.textContent = `Data: ${d.toLocaleDateString("pt-BR")}`;
+      eventDays.textContent = `${diffDays} dias`;
+    }
+
+    function renderShopSelects(){
+      const memOptions = state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+      selShopMember.innerHTML = memOptions;
+
+      selShopItem.innerHTML = state.shop.map(it => `<option value="${it.id}">${esc(it.name)} (-${Number(it.cost)||0} pts)</option>`).join("");
+
+      if(!selShopMember.value && state.members[0]) selShopMember.value = state.members[0].id;
+      if(!selShopItem.value && state.shop[0]) selShopItem.value = state.shop[0].id;
+
+      renderShopPreview();
+    }
+
+    function renderShopItems(){
+      if(state.shop.length === 0){
+        shopItemsList.innerHTML = `<div class="li"><div class="left"><div class="t">Nenhum item</div><div class="m">Cadastre acima</div></div></div>`;
+        return;
+      }
+      shopItemsList.innerHTML = state.shop.map(it => `
+        <div class="li">
+          <div class="left">
+            <div class="t">${esc(it.name)}</div>
+            <div class="m">Custo: ${Number(it.cost)||0} pts</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="chip lime">-${Number(it.cost)||0}</div>
+            <span class="tiny" data-remove-item="${it.id}">Remover</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderMyProfileSelect(){
+      const opts = state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+      selMyProfile.innerHTML = opts;
+      if(!selMyProfile.value && state.members[0]) selMyProfile.value = state.members[0].id;
+
+      const me = memberById(selMyProfile.value);
+      inpMyName.value = me?.name || "";
+    }
+
+    function renderLeader(){
+      const opts = state.members.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("");
+      selLeader.innerHTML = opts;
+      selLeader.value = state.leaderId || state.members[0]?.id || "";
+
+      inpEventName.value = state.event?.name === "XXX" ? "" : (state.event?.name || "");
+      inpEventDate.value = state.event?.date || "";
+
+      renderActions();
+    }
+
+    function renderActions(){
+      if(state.actions.length === 0){
+        actionsList.innerHTML = `<div class="li"><div class="left"><div class="t">Sem categorias</div><div class="m">Cadastre uma acima</div></div></div>`;
+        return;
+      }
+      actionsList.innerHTML = state.actions.map(a => `
+        <div class="li">
+          <div class="left">
+            <div class="t">${esc(a.label)}</div>
+            <div class="m">Pontos por unidade</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="chip ${a.points>=0?'lime':''}">${fmtPts(a.points)}</div>
+            <span class="tiny" data-remove-action="${a.id}">Remover</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // ----- Launch flow state (cart) -----
+    let launchTargetMemberId = "";
+    let cartQtyByActionId = {}; // {actionId: qty}
+
+    function resetCart(){
+      cartQtyByActionId = {};
+      state.actions.forEach(a => cartQtyByActionId[a.id] = 0);
+      inpLaunchNote.value = "";
+    }
+
+    function renderLaunchStep1(){
+      // grid of members
+      memberGrid.innerHTML = state.members.map(m => {
+        const active = m.id === launchTargetMemberId ? "active" : "";
+        const pic = m.photoDataUrl
+          ? `<img src="${m.photoDataUrl}" alt="${esc(m.name)}">`
+          : `<span>${esc((m.name?.[0]||"U").toUpperCase())}</span>`;
+        return `
+          <div class="memberTile ${active}" data-pick-member="${m.id}">
+            <div class="memberPic">${pic}</div>
+            <div class="n">${esc(m.name)}</div>
+            <div class="p">${fmtPts(m.points||0)} pts</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function computeCartTotal(){
+      let total = 0;
+      for(const a of state.actions){
+        const qty = Number(cartQtyByActionId[a.id] || 0);
+        total += qty * (Number(a.points) || 0);
+      }
+      return total;
+    }
+
+    function renderCart(){
+      const target = memberById(launchTargetMemberId);
+      const current = target ? (target.points||0) : 0;
+      const total = computeCartTotal();
+      const final = current + total;
+
+      cartTargetHint.innerHTML = target
+        ? `Lançando para: <b>${esc(target.name)}</b> • saldo atual: <b>${current}</b>`
+        : `Selecione um membro`;
+
+      cartList.innerHTML = state.actions.map(a => {
+        const qty = Number(cartQtyByActionId[a.id] || 0);
+        const unit = Number(a.points)||0;
+        return `
+          <div class="cartRow">
+            <div class="cartLeft">
+              <div class="cartName">${esc(a.label)}</div>
+              <div class="cartPts">${fmtPts(unit)} por unidade</div>
+            </div>
+            <div class="qty">
+              <div class="qtyBtn" data-qty-minus="${a.id}">−</div>
+              <div class="qtyVal" id="qty-${a.id}">${qty}</div>
+              <div class="qtyBtn plus" data-qty-plus="${a.id}">+</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      sumAdd.textContent = total;
+      sumFinal.textContent = final;
+    }
+
+    function renderLaunchHistory(){
+      // show only type "launch"
+      const items = [...state.ledger].filter(x => x.type === "launch").slice(0, 30);
+      if(items.length === 0){
+        launchHistoryList.innerHTML = `<div class="li"><div class="left"><div class="t">Sem lançamentos ainda</div><div class="m">Faça um lançamento no carrinho</div></div></div>`;
+        return;
+      }
+
+      const memMap = new Map(state.members.map(m => [m.id, m]));
+      launchHistoryList.innerHTML = items.map(l => {
+        const from = memMap.get(l.byMemberId);
+        const to = memMap.get(l.memberId);
+        const dt = new Date(l.at).toLocaleString("pt-BR");
+
+        const breakdownText = (l.breakdown || [])
+          .filter(b => b.qty && b.qty !== 0)
+          .map(b => `${b.label} x${b.qty} (${fmtPts(b.subtotal)})`)
+          .join(" • ");
+
+        return `
+          <div class="li">
+            <div class="left">
+              <div class="t">${esc(from?.name || "—")} → ${esc(to?.name || "—")} • ${fmtPts(l.points)} pts</div>
+              <div class="m">${esc(breakdownText || "—")}</div>
+              <div class="m">${dt}</div>
+            </div>
+            <div class="chip ${l.points>=0 ? 'lime' : ''}">${fmtPts(l.points)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderLedger(){
+      const items = [...state.ledger].slice(0, 60);
+      if(items.length === 0){
+        ledgerList.innerHTML = `<div class="li"><div class="left"><div class="t">Sem histórico</div><div class="m">Ainda não houve lançamentos</div></div></div>`;
+        return;
+      }
+
+      const memMap = new Map(state.members.map(m => [m.id, m]));
+      ledgerList.innerHTML = items.map(l => {
+        const dt = new Date(l.at).toLocaleString("pt-BR");
+        const to = memMap.get(l.memberId);
+        const by = memMap.get(l.byMemberId);
+
+        let title = "";
+        let sub = "";
+
+        if(l.type === "launch"){
+          title = `${esc(by?.name || "—")} → ${esc(to?.name || "—")} • ${fmtPts(l.points)} pts`;
+          sub = (l.breakdown || [])
+            .filter(b => b.qty && b.qty !== 0)
+            .map(b => `${b.label} x${b.qty} (${fmtPts(b.subtotal)})`)
+            .join(" • ");
+        }else if(l.type === "shop"){
+          title = `${esc(to?.name || "—")} • ${esc(l.label || "Compra")} • ${fmtPts(l.points)} pts`;
+          sub = l.note || "";
+        }else{
+          title = `${esc(to?.name || "—")} • ${esc(l.label || "Registro")} • ${fmtPts(l.points)} pts`;
+          sub = l.note || "";
+        }
+
+        return `
+          <div class="li">
+            <div class="left">
+              <div class="t">${title}</div>
+              <div class="m">${esc(sub || "—")}</div>
+              <div class="m">${dt}</div>
+            </div>
+            <div class="chip ${l.points>=0 ? 'lime' : ''}">${fmtPts(l.points)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // ---------------------------
+    // Shop preview
+    // ---------------------------
+    function renderShopPreview(){
+      const it = state.shop.find(x => x.id === selShopItem.value);
+      if(!it){
+        shopPreview.textContent = "Prévia: —";
+        shopWarn.classList.add("hide");
+        return;
+      }
+      const cost = Number(it.cost)||0;
+      const current = pointsOf(selShopMember.value);
+      const after = current - cost;
+
+      shopPreview.innerHTML = `Prévia: desconta <b>-${cost}</b> pts • saldo <b>${current}</b> → <b>${after}</b>`;
+
+      if(after < 0){
+        shopWarn.textContent = "Saldo insuficiente (regra: não deixar ficar negativo).";
+        shopWarn.classList.remove("hide");
+      }else{
+        shopWarn.classList.add("hide");
+      }
+    }
+
+    // ---------------------------
+    // Events
+    // ---------------------------
+    // Launch step navigation
+    function gotoStep1(){
+      launchStep1.classList.remove("hide");
+      launchStep2.classList.add("hide");
+      renderLaunchStep1();
+    }
+    function gotoStep2(){
+      if(!launchTargetMemberId) return alert("Selecione um membro.");
+      launchStep1.classList.add("hide");
+      launchStep2.classList.remove("hide");
+      renderCart();
+    }
+
+    btnGoCart.addEventListener("click", gotoStep2);
+    btnBackToMembers.addEventListener("click", gotoStep1);
+
+    // Pick member on grid
+    memberGrid.addEventListener("click", (e) => {
+      const tile = e.target.closest("[data-pick-member]");
+      if(!tile) return;
+      launchTargetMemberId = tile.dataset.pickMember;
+      renderLaunchStep1();
+    });
+
+    // qty buttons
+    cartList.addEventListener("click", (e) => {
+      const plus = e.target.closest("[data-qty-plus]");
+      const minus = e.target.closest("[data-qty-minus]");
+      if(!plus && !minus) return;
+
+      const id = (plus || minus).dataset.qtyPlus || (plus || minus).dataset.qtyMinus;
+      const cur = Number(cartQtyByActionId[id] || 0);
+      const next = plus ? cur + 1 : Math.max(0, cur - 1);
+      cartQtyByActionId[id] = next;
+      renderCart();
+    });
+
+    // Confirm launch (creates ledger entry with breakdown)
+    btnConfirmLaunch.addEventListener("click", () => {
+      if(!launchTargetMemberId) return alert("Selecione um membro.");
+      const target = memberById(launchTargetMemberId);
+      if(!target) return alert("Membro inválido.");
+
+      const total = computeCartTotal();
+      if(total === 0) return alert("Adicione pelo menos 1 categoria.");
+
+      const byId = selMyProfile.value || state.members[0]?.id || "";
+
+      const breakdown = state.actions.map(a => {
+        const qty = Number(cartQtyByActionId[a.id] || 0);
+        const unit = Number(a.points) || 0;
+        return {
+          actionId: a.id,
+          label: a.label,
+          unitPoints: unit,
+          qty,
+          subtotal: qty * unit
+        };
+      });
+
+      // apply points
+      target.points = (target.points || 0) + total;
+
+      // store ledger
+      state.ledger.unshift({
+        id: uid(),
+        type: "launch",
+        memberId: target.id,
+        byMemberId: byId,
+        points: total,
+        breakdown,
+        note: inpLaunchNote.value.trim(),
+        at: new Date().toISOString()
+      });
+
+      save(state);
+      resetCart();
+      renderAll();
+      gotoStep1();
+      alert("Lançamento confirmado!");
+      show("home");
+    });
+
+    // Shop actions
+    selShopMember.addEventListener("change", renderShopPreview);
+    selShopItem.addEventListener("change", renderShopPreview);
+
+    btnBuy.addEventListener("click", () => {
+      const memberId = selShopMember.value;
+      const itemId = selShopItem.value;
+      const it = state.shop.find(x => x.id === itemId);
+      const target = memberById(memberId);
+      if(!memberId || !itemId || !it || !target) return alert("Escolha um membro e um item.");
+
+      const cost = Number(it.cost)||0;
+      const current = target.points || 0;
+      const after = current - cost;
+
+      if(after < 0) return alert("Saldo insuficiente para essa compra.");
+
+      target.points = after;
+
+      state.ledger.unshift({
+        id: uid(),
+        type: "shop",
+        memberId: target.id,
+        byMemberId: selMyProfile.value || state.members[0]?.id || "",
+        points: -cost,
+        label: `Compra: ${it.name}`,
+        note: inpShopNote.value.trim(),
+        at: new Date().toISOString()
+      });
+
+      inpShopNote.value = "";
+      save(state);
+      renderAll();
+      show("home");
+      alert("Compra registrada!");
+    });
+
+    btnAddItem.addEventListener("click", () => {
+      const name = inpItemName.value.trim();
+      const cost = Number(inpItemCost.value);
+      if(!name) return;
+      if(!Number.isFinite(cost) || cost <= 0) return alert("Custo inválido. Use positivo (ex.: 20).");
+      state.shop.push({ id: uid(), name, cost });
+      inpItemName.value = "";
+      inpItemCost.value = "";
+      save(state);
+      renderAll();
+      alert("Item adicionado!");
+    });
+
+    // Ajustes: save my profile
+    selMyProfile.addEventListener("change", () => {
+      const me = memberById(selMyProfile.value);
+      inpMyName.value = me?.name || "";
+      renderHeader();
+    });
+
+    btnSaveMyProfile.addEventListener("click", async () => {
+      const me = memberById(selMyProfile.value);
+      if(!me) return;
+
+      const newName = inpMyName.value.trim();
+      if(newName) me.name = newName;
+
+      const file = inpMyPhoto.files && inpMyPhoto.files[0];
+      if(file){
+        const dataUrl = await fileToDataUrl(file);
+        me.photoDataUrl = dataUrl;
+      }
+
+      save(state);
+      renderAll();
+      alert("Perfil atualizado!");
+    });
+
+    function fileToDataUrl(file){
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(String(r.result || ""));
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+
+    // Líder: set leader
+    selLeader.addEventListener("change", () => {
+      state.leaderId = selLeader.value;
+      save(state);
+      alert("Líder da rodada atualizado.");
+    });
+
+    // Líder: save event (leader only advisory)
+    btnSaveEvent.addEventListener("click", () => {
+      if(!isLeaderSelected()) return alert("Só o líder da rodada deve alterar o evento.");
+      const name = inpEventName.value.trim() || "XXX";
+      const date = inpEventDate.value || "";
+      state.event = { name, date };
+      save(state);
+      renderAll();
+      alert("Evento salvo!");
+    });
+
+    // Líder: add category
+    btnAddAction.addEventListener("click", () => {
+      if(!isLeaderSelected()) return alert("Só o líder da rodada deve alterar categorias.");
+      const label = inpActionLabel.value.trim();
+      const pts = Number(inpActionPoints.value);
+      if(!label) return;
+      if(!Number.isFinite(pts)) return alert("Pontos inválidos. Ex.: 5 ou -10");
+
+      state.actions.push({ id: uid(), label, points: pts });
+      inpActionLabel.value = "";
+      inpActionPoints.value = "";
+
+      save(state);
+      // reset cart template
+      resetCart();
+      renderAll();
+      alert("Categoria adicionada!");
+    });
+
+    // remove handlers (with leader guard for actions)
+    document.addEventListener("click", (e) => {
+      const rmItem = e.target.closest("[data-remove-item]");
+      if(rmItem){
+        const id = rmItem.dataset.removeItem;
+        if(confirm("Remover item? Compras antigas permanecem no histórico.")){
+          state.shop = state.shop.filter(it => it.id !== id);
+          save(state);
+          renderAll();
+        }
+        return;
+      }
+
+      const rmAction = e.target.closest("[data-remove-action]");
+      if(rmAction){
+        if(!isLeaderSelected()) return alert("Só o líder da rodada pode remover categorias.");
+        const id = rmAction.dataset.removeAction;
+        if(confirm("Remover categoria? Lançamentos antigos continuam no histórico.")){
+          state.actions = state.actions.filter(a => a.id !== id);
+          // clean cart qty map
+          delete cartQtyByActionId[id];
+          save(state);
+          resetCart();
+          renderAll();
+        }
+      }
+    });
+
+    // reset
+    btnReset.addEventListener("click", () => {
+      if(!isLeaderSelected()) return alert("Só o líder da rodada deve zerar.");
+      if(confirm("Zerar tudo? Isso apaga membros, categorias, loja e histórico.")){
+        state = defaultState();
+        save(state);
+        launchTargetMemberId = "";
+        resetCart();
+        renderAll();
+        show("home");
+      }
+    });
+
+    // ---------------------------
+    // Render all
+    // ---------------------------
+    function renderAll(){
+      // header profile select must exist before header uses it
+      renderMyProfileSelect();
+      renderHeader();
+      renderPodium();
+      renderEvent();
+      renderShopSelects();
+      renderShopItems();
+      renderLeader();
+      renderLedger();
+      renderLaunchStep1();
+      renderLaunchHistory();
+
+      // ensure cart map has all actions
+      state.actions.forEach(a => {
+        if(typeof cartQtyByActionId[a.id] === "undefined") cartQtyByActionId[a.id] = 0;
+      });
+    }
+
+    // init
+    resetCart();
+    renderAll();
+    show("home");
+    gotoStep1();
+  </script>
+</body>
+</html>
