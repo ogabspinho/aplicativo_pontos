@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login • Pontos do Grupo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --black:#000000;
+      --purple:#7D39EB;
+      --lime:#C6FF33;
+      --white:#FFFFFF;
+
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: var(--black);
+      color: var(--white);
+      font-family: "Google Sans","Product Sans","Inter",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
+      overflow-x:hidden;
+    }
+
+    /* ===== Animated background ===== */
+    .bg{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      overflow:hidden;
+      background:
+        radial-gradient(1200px 600px at 20% 20%, rgba(125,57,235,.30), transparent 60%),
+        radial-gradient(900px 500px at 80% 70%, rgba(198,255,51,.16), transparent 60%),
+        radial-gradient(700px 380px at 50% 105%, rgba(125,57,235,.18), transparent 60%),
+        #000;
+    }
+
+    .blob{
+      position:absolute;
+      width: 520px;
+      height: 520px;
+      border-radius: 999px;
+      filter: blur(50px);
+      opacity:.55;
+      transform: translate3d(0,0,0);
+      animation: floaty 12s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .blob.purple{
+      background: radial-gradient(circle at 30% 30%, rgba(125,57,235,.95), rgba(125,57,235,.0) 65%);
+      left:-140px; top:-120px;
+      animation-duration: 14s;
+    }
+    .blob.lime{
+      background: radial-gradient(circle at 30% 30%, rgba(198,255,51,.75), rgba(198,255,51,.0) 65%);
+      right:-170px; bottom:-160px;
+      animation-duration: 16s;
+      animation-direction: reverse;
+    }
+    .blob.mid{
+      background: radial-gradient(circle at 30% 30%, rgba(125,57,235,.55), rgba(125,57,235,.0) 65%);
+      left: 40%;
+      top: 55%;
+      width: 420px;
+      height: 420px;
+      opacity:.35;
+      animation-duration: 18s;
+    }
+
+    @keyframes floaty{
+      0%   { transform: translate(-10px, -10px) scale(1); }
+      35%  { transform: translate(28px, 10px) scale(1.08); }
+      70%  { transform: translate(-12px, 24px) scale(0.98); }
+      100% { transform: translate(-10px, -10px) scale(1); }
+    }
+
+    /* subtle grain overlay */
+    .grain{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.10;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+      background-size: 260px 260px;
+      animation: grainMove 4s steps(6) infinite;
+    }
+    @keyframes grainMove{
+      0%{ transform: translate(0,0); }
+      25%{ transform: translate(-6px, 4px); }
+      50%{ transform: translate(-10px, -4px); }
+      75%{ transform: translate(6px, 10px); }
+      100%{ transform: translate(0,0); }
+    }
+
+    /* ===== Layout ===== */
+    .wrap{
+      min-height: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 16px;
+    }
+
+    .panel{
+      width: min(420px, 100%);
+      display:flex;
+      flex-direction:column;
+      gap: 16px;
+      align-items:center;
+      text-align:center;
+      animation: popIn .8s cubic-bezier(.2,.9,.1,1.05) both;
+    }
+
+    @keyframes popIn{
+      from{ opacity:0; transform: translateY(18px) scale(.98); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== Logo ===== */
+    .logoWrap{
+      width: 122px;
+      height: 122px;
+      border-radius: 28px;
+      position:relative;
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .logoGlow{
+      position:absolute;
+      inset:-30%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(198,255,51,.55), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(125,57,235,.55), transparent 55%);
+      filter: blur(18px);
+      animation: glowPulse 3.4s ease-in-out infinite;
+      opacity:.75;
+    }
+    @keyframes glowPulse{
+      0%,100%{ transform: scale(1); opacity:.72; }
+      50%{ transform: scale(1.07); opacity:.92; }
+    }
+    .logo{
+      width: 78px;
+      height: 78px;
+      position:relative;
+      z-index:2;
+      display:grid;
+      place-items:center;
+      border-radius: 22px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .logo img{
+      width: 62px;
+      height: 62px;
+      object-fit:contain;
+      display:block;
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.55));
+    }
+
+    /* fallback text logo */
+    .logoText{
+      font-weight: 900;
+      letter-spacing:.4px;
+      color: var(--lime);
+    }
+
+    h1{
+      margin: 6px 0 0;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+    .sub{
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+    }
+
+    /* ===== Card ===== */
+    .card{
+      width: 100%;
+      border-radius: var(--r);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 16px;
+      text-align:left;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(120deg, rgba(198,255,51,.25), rgba(125,57,235,.18), transparent 60%);
+      filter: blur(14px);
+      opacity:.35;
+      pointer-events:none;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      margin-top: 10px;
+      position:relative;
+      z-index:2;
+    }
+    label{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.25px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .inputWrap{
+      position:relative;
+    }
+    input{
+      width:100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      padding: 12px 12px;
+      font-size: 14px;
+      background: rgba(0,0,0,.35);
+      color: var(--white);
+      outline:none;
+      transition: transform .12s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    input::placeholder{ color: rgba(255,255,255,.42); }
+    input:focus{
+      border-color: rgba(198,255,51,.55);
+      box-shadow: 0 0 0 4px rgba(198,255,51,.10);
+      transform: translateY(-1px);
+    }
+
+    .toggle{
+      position:absolute;
+      right: 10px;
+      top:50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(125,57,235,.35);
+      border: 1px solid rgba(255,255,255,.16);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease;
+    }
+    .toggle:active{ transform: translateY(-50%) scale(.96); }
+    .toggle svg{ width:18px; height:18px; }
+
+    .row{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top: 10px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      width:100%;
+      border: none;
+      border-radius: 18px;
+      padding: 12px 14px;
+      font-weight: 900;
+      cursor:pointer;
+      background: var(--lime);
+      color: var(--black);
+      letter-spacing:.2px;
+      transition: transform .12s ease, filter .2s ease, box-shadow .2s ease;
+      box-shadow: 0 16px 30px rgba(198,255,51,.16);
+    }
+    .btn:hover{ filter: brightness(1.02); }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+
+    .hint{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,.8);
+      position:relative;
+      z-index:2;
+    }
+
+    .error{
+      margin-top: 12px;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--black);
+      background: var(--lime);
+      border-radius: 16px;
+      padding: 10px 12px;
+      display:none;
+      position:relative;
+      z-index:2;
+    }
+    .error.show{
+      display:block;
+      animation: shake .35s ease-in-out both;
+    }
+    @keyframes shake{
+      0%{ transform: translateX(0); }
+      25%{ transform: translateX(-6px); }
+      50%{ transform: translateX(6px); }
+      75%{ transform: translateX(-4px); }
+      100%{ transform: translateX(0); }
+    }
+
+    .footer{
+      margin-top: 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,.55);
+    }
+
+    /* tiny floating sparkle */
+    .spark{
+      position:absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--lime);
+      opacity:.65;
+      filter: blur(.2px);
+      box-shadow: 0 0 18px rgba(198,255,51,.45);
+      animation: spark 2.6s ease-in-out infinite;
+    }
+    .spark.s1{ left: 18px; top: 18px; animation-delay: .1s; }
+    .spark.s2{ right: 22px; top: 30px; animation-delay: .6s; opacity:.45; }
+    .spark.s3{ left: 26px; bottom: 20px; animation-delay: 1.1s; opacity:.35; }
+
+    @keyframes spark{
+      0%,100%{ transform: translateY(0) scale(1); }
+      50%{ transform: translateY(-10px) scale(1.15); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg">
+    <div class="blob purple"></div>
+    <div class="blob lime"></div>
+    <div class="blob mid"></div>
+  </div>
+  <div class="grain"></div>
+
+  <main class="wrap">
+    <section class="panel">
+      <div class="logoWrap" aria-label="Logo">
+        <div class="logoGlow"></div>
+        <div class="spark s1"></div>
+        <div class="spark s2"></div>
+        <div class="spark s3"></div>
+
+        <div class="logo" id="logoBox">
+          <!-- Se não tiver imagem, ele mostra texto -->
+          <span class="logoText" id="logoText">P</span>
+        </div>
+      </div>
+
+      <div>
+        <h1>Entrar</h1>
+        <p class="sub">Faça login para acessar o ranking e lançar pontos</p>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label>Usuário</label>
+          <input id="user" placeholder="@nome" autocomplete="username" />
+        </div>
+
+        <div class="field">
+          <label>Senha</label>
+          <div class="inputWrap">
+            <input id="pass" type="password" placeholder="nome2026" autocomplete="current-password" />
+            <div class="toggle" id="togglePass" title="Mostrar/ocultar senha" aria-label="Mostrar/ocultar senha">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="error" id="err">Usuário ou senha inválidos.</div>
+
+        <div class="row">
+          <button class="btn" id="btn">Entrar</button>
+        </div>
+
+        <div class="hint">Dica: usuário no formato <b>@nome</b> e senha <b>nome2026</b></div>
+        <div class="footer">Versão protótipo • Visual mobile-first</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ====== Configure seu logo aqui ======
+    const LOGO_URL = ""; // exemplo: "assets/logo.png"
+    const logoBox = document.getElementById("logoBox");
+    const logoText = document.getElementById("logoText");
+
+    if(LOGO_URL){
+      logoText.remove();
+      const img = document.createElement("img");
+      img.src = LOGO_URL;
+      img.alt = "Logo";
+      logoBox.appendChild(img);
+    }else{
+      // letra inicial de "Pontos"
+      logoText.textContent = "P";
+    }
+
+    // ====== UI ======
+    const user = document.getElementById("user");
+    const pass = document.getElementById("pass");
+    const toggle = document.getElementById("togglePass");
+    const btn = document.getElementById("btn");
+    const err = document.getElementById("err");
+
+    toggle.addEventListener("click", () => {
+      pass.type = (pass.type === "password") ? "text" : "password";
+    });
+
+    function showError(msg){
+      err.textContent = msg;
+      err.classList.add("show");
+      setTimeout(()=> err.classList.remove("show"), 1800);
+    }
+
+    function onSubmit(){
+      const u = (user.value || "").trim();
+      const p = (pass.value || "").trim();
+
+      // aqui você liga com seu sistema real.
+      // por enquanto, valida só padrão mínimo:
+      if(!u.startsWith("@") || p.length < 4){
+        return showError("Preencha usuário e senha corretamente.");
+      }
+
+      // SIMULA SUCESSO (troque pela sua validação real)
+      // exemplo: salvar sessão e mandar para home
+      localStorage.setItem("demo_logged_user", u);
+
+      // redireciona
+      window.location.href = "home.html";
+    }
+
+    btn.addEventListener("click", onSubmit);
+    pass.addEventListener("keydown", (e) => { if(e.key === "Enter") onSubmit(); });
+    user.addEventListener("keydown", (e) => { if(e.key === "Enter") pass.focus(); });
+
+    // micro animação de focus inicial
+    setTimeout(()=> user.focus(), 220);
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pontos do Grupo • Home</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="hello">
+        <p class="title" id="helloTitle">Olá, user!</p>
+        <p class="subtitle" id="helloSub">Seu placar do grupo</p>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+
+    <div class="content">
+      <section id="view-home">
+        <div class="podium">
+          <div class="podiumRow" id="podiumRow"></div>
+          <div class="rankBars" id="rankBars"></div>
+        </div>
+
+        <div class="nextEvent">
+          <div class="label">Próximo evento</div>
+          <div class="nextEventBox">
+            <div class="nextEventMain">
+              <div class="eventName" id="eventName">XXX</div>
+              <div class="eventMeta" id="eventMeta">Defina a data do próximo evento</div>
+            </div>
+            <div class="daysPill" id="eventDays">— dias</div>
+          </div>
+          <div class="hint" style="margin-top:12px">
+            Para editar o evento, vá em <b>Líder</b>.
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="bottomNav">
+    <a class="navBtn active" href="home.html"><span class="dot"></span>Home</a>
+    <a class="navBtn" href="lancar.html"><span class="dot"></span>Lançar</a>
+    <a class="navBtn" href="loja.html"><span class="dot"></span>Loja</a>
+    <a class="navBtn" href="ajustes.html"><span class="dot"></span>Ajustes</a>
+    <a class="navBtn" href="lider.html"><span class="dot"></span>Líder</a>
+  </nav>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

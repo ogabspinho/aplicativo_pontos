@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pontos do Grupo • Lançar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="hello">
+        <p class="title" id="helloTitle">Olá, user!</p>
+        <p class="subtitle" id="helloSub">Lançamento de pontos</p>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+
+    <div class="content">
+      <section id="view-lancar">
+        <div class="card" id="launchStep1">
+          <p class="panelTitle">Selecione o membro</p>
+          <p class="panelSub">Escolha quem vai receber os pontos</p>
+          <div class="memberGrid" id="memberGrid"></div>
+          <div style="height:12px"></div>
+          <button id="btnGoCart" class="secondary">Continuar</button>
+        </div>
+
+        <div class="card hide" id="launchStep2">
+          <div class="rowBetween">
+            <div>
+              <p class="panelTitle" id="cartTitle">Carrinho</p>
+              <p class="panelSub" id="cartSub">Escolha quantidades por categoria</p>
+            </div>
+            <button class="ghost" id="btnBackToMembers" style="max-width:120px">Voltar</button>
+          </div>
+
+          <div class="hint" id="cartTargetHint" style="margin-top:12px"></div>
+
+          <div class="list" id="cartList"></div>
+
+          <div class="summaryGrid">
+            <div class="summaryBox">
+              <div class="summaryLabel">Total a adicionar</div>
+              <div class="summaryValue" id="sumAdd">0</div>
+            </div>
+            <div class="summaryBox">
+              <div class="summaryLabel">Saldo final</div>
+              <div class="summaryValue" id="sumFinal">0</div>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+          <label>Observação (opcional)</label>
+          <input id="inpLaunchNote" placeholder="Ex.: pontos do rolê / punição..." />
+
+          <div style="height:12px"></div>
+          <button id="btnConfirmLaunch">Confirmar</button>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Histórico de lançamentos</p>
+          <p class="panelSub">Quem lançou, categorias, pontos e data/hora</p>
+          <div class="list" id="launchHistoryList"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="bottomNav">
+    <a class="navBtn" href="home.html"><span class="dot"></span>Home</a>
+    <a class="navBtn active" href="lancar.html"><span class="dot"></span>Lançar</a>
+    <a class="navBtn" href="loja.html"><span class="dot"></span>Loja</a>
+    <a class="navBtn" href="ajustes.html"><span class="dot"></span>Ajustes</a>
+    <a class="navBtn" href="lider.html"><span class="dot"></span>Líder</a>
+  </nav>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

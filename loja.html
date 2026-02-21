@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pontos do Grupo • Loja</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="hello">
+        <p class="title" id="helloTitle">Olá, user!</p>
+        <p class="subtitle" id="helloSub">Loja</p>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+
+    <div class="content">
+      <section id="view-loja">
+        <div class="card">
+          <p class="panelTitle">Loja</p>
+          <p class="panelSub">Troque pontos por itens</p>
+
+          <div class="form">
+            <label>Membro</label>
+            <select id="selShopMember"></select>
+
+            <label>Item</label>
+            <select id="selShopItem"></select>
+
+            <label>Observação (opcional)</label>
+            <input id="inpShopNote" placeholder="Ex.: escolheu filme / ganhou sobremesa..." />
+
+            <div class="hint" id="shopPreview">Prévia: —</div>
+            <div class="warn hide" id="shopWarn"></div>
+
+            <button id="btnBuy">Comprar (descontar pontos)</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Itens da loja</p>
+          <p class="panelSub">Cadastre itens (qualquer um pode)</p>
+
+          <div class="form">
+            <label>Nome do item</label>
+            <input id="inpItemName" placeholder="Ex.: Escolher filme" />
+            <label>Custo (pontos)</label>
+            <input id="inpItemCost" placeholder="Ex.: 20" inputmode="numeric" />
+            <button class="secondary" id="btnAddItem">Adicionar item</button>
+          </div>
+
+          <div class="list" id="shopItemsList"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="bottomNav">
+    <a class="navBtn" href="home.html"><span class="dot"></span>Home</a>
+    <a class="navBtn" href="lancar.html"><span class="dot"></span>Lançar</a>
+    <a class="navBtn active" href="loja.html"><span class="dot"></span>Loja</a>
+    <a class="navBtn" href="ajustes.html"><span class="dot"></span>Ajustes</a>
+    <a class="navBtn" href="lider.html"><span class="dot"></span>Líder</a>
+  </nav>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

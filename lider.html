@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pontos do Grupo • Líder</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="hello">
+        <p class="title" id="helloTitle">Olá, user!</p>
+        <p class="subtitle" id="helloSub">Líder</p>
+      </div>
+      <div class="avatar" id="avatar">U</div>
+    </div>
+
+    <div class="content">
+      <section id="view-lider">
+        <div class="card">
+          <p class="panelTitle">Líder</p>
+          <p class="panelSub">Apenas o líder da rodada deve editar categorias, pontos e evento</p>
+
+          <div class="form">
+            <label>Líder da rodada</label>
+            <select id="selLeader"></select>
+            <div class="hint">
+              Controle local: selecione quem é o líder.
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Evento</p>
+          <p class="panelSub">Editar nome e data do próximo evento</p>
+
+          <div class="form">
+            <label>Nome do evento</label>
+            <input id="inpEventName" placeholder="Ex.: Churrasco / Cinema" />
+            <label>Data do evento</label>
+            <input id="inpEventDate" type="date" />
+            <button class="secondary" id="btnSaveEvent">Salvar evento</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <p class="panelTitle">Categorias (ações)</p>
+          <p class="panelSub">Editar lista e pontos por unidade</p>
+
+          <div class="form">
+            <label>Nova categoria</label>
+            <input id="inpActionLabel" placeholder="Ex.: Categoria 1" />
+            <label>Pontos por unidade</label>
+            <input id="inpActionPoints" placeholder="Ex.: 5 ou -10" inputmode="numeric" />
+            <button class="secondary" id="btnAddAction">Adicionar categoria</button>
+          </div>
+
+          <div class="list" id="actionsList"></div>
+
+          <div style="height:10px"></div>
+          <button id="btnReset" class="ghost">
+            Zerar tudo (membros, categorias, loja e histórico)
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="bottomNav">
+    <a class="navBtn" href="home.html"><span class="dot"></span>Home</a>
+    <a class="navBtn" href="lancar.html"><span class="dot"></span>Lançar</a>
+    <a class="navBtn" href="loja.html"><span class="dot"></span>Loja</a>
+    <a class="navBtn" href="ajustes.html"><span class="dot"></span>Ajustes</a>
+    <a class="navBtn active" href="lider.html"><span class="dot"></span>Líder</a>
+  </nav>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
