@@ -1,0 +1,63 @@
+{
+	"nome": "Vicente de Jesus",
+	"jogador": "Vinícius Lima",
+	"ocupacao": "Bibliotecário",
+	"idade": "39",
+	"sexo": "Masculino",
+	"residencia": "São Paulo",
+	"nascimento": "01/01/1960",
+	"caracteristicas": [
+		{
+			"tipo": "FOR",
+			"valor": 30,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "CON",
+			"valor": 50,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "TAM",
+			"valor": 0,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "DES",
+			"valor": 0,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "APA",
+			"valor": 0,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "INT",
+			"valor": 0,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "POD",
+			"valor": 0,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "EDU",
+			"valor": 0,
+			"metade": 0,
+			"quinto": 0
+		},
+		{
+			"tipo": "TAXA DE MOV.",
+			"valor": 0
+		}
+	]
+}

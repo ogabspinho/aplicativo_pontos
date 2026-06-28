@@ -1,0 +1,711 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ficha do Investigador - GitHub Editável</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(180deg,#050505 0%,#12051f 55%,#1d0733 100%);
+  color:#fff;
+  padding:18px;
+  padding-bottom:105px;
+}
+
+.app{max-width:480px;margin:auto}
+
+.tag{
+  color:#b18cff;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+h1{
+  margin:6px 0;
+  font-size:26px;
+}
+
+.subtitle{
+  color:#aaa;
+  margin-bottom:18px;
+  font-size:14px;
+}
+
+.status{
+  margin-bottom:14px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  color:#cfc6e6;
+  font-size:12px;
+}
+
+.status.erro{
+  color:#ffd6d6;
+  border-color:rgba(255,90,90,.35);
+  background:rgba(255,90,90,.08);
+}
+
+.status.ok{
+  color:#d8ffdf;
+  border-color:rgba(90,255,140,.25);
+  background:rgba(90,255,140,.08);
+}
+
+.card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  margin-bottom:18px;
+  backdrop-filter:blur(8px);
+  box-shadow:0 12px 36px rgba(0,0,0,.35);
+}
+
+.screen{display:none}
+.screen.active{display:block}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  padding:18px;
+}
+
+.field label{
+  display:block;
+  font-size:11px;
+  color:#aaa;
+  margin-bottom:5px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.field input{
+  width:100%;
+  padding:14px 12px;
+  border-radius:14px;
+  background:#16111f;
+  border:1px solid #32224d;
+  color:#fff;
+  outline:none;
+  font-size:15px;
+}
+
+.field input:focus{
+  border-color:#8f5cff;
+  box-shadow:0 0 0 3px rgba(143,92,255,.16);
+}
+
+.section{padding:18px}
+
+.section-title{
+  margin-bottom:16px;
+  color:#c7b2ff;
+  text-transform:uppercase;
+  font-size:13px;
+  letter-spacing:1px;
+}
+
+.widgets{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.widget{
+  min-height:132px;
+  background:linear-gradient(180deg,#24123d,#160b26);
+  border:1px solid rgba(164,110,255,.25);
+  border-radius:18px;
+  padding:10px 8px;
+  box-shadow:0 10px 28px rgba(0,0,0,.35);
+}
+
+.widget-title{
+  text-align:center;
+  font-size:10px;
+  letter-spacing:.8px;
+  color:#c7b2ff;
+  margin-bottom:8px;
+  font-weight:800;
+  min-height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.main{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+.main input{
+  width:100%;
+  text-align:center;
+  font-size:30px;
+  line-height:1;
+  font-weight:800;
+  background:none;
+  border:none;
+  color:#fff;
+  outline:none;
+}
+
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+}
+
+.small{
+  flex:1;
+  background:rgba(255,255,255,.055);
+  padding:6px 3px;
+  border-radius:11px;
+  text-align:center;
+}
+
+.small label{
+  display:block;
+  font-size:9px;
+  color:#9d8bb7;
+  margin-bottom:2px;
+}
+
+.small input{
+  width:100%;
+  background:none;
+  border:none;
+  text-align:center;
+  color:#ddd;
+  font-size:13px;
+  outline:none;
+}
+
+.mov-controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-top:2px;
+}
+
+.mov-controls button{
+  width:36px;
+  height:36px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  font-size:22px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.mov-controls button:active{
+  transform:scale(.94);
+  background:rgba(124,60,255,.35);
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+
+.action-btn{
+  flex:1;
+  border:none;
+  border-radius:16px;
+  padding:14px;
+  font-weight:800;
+  color:white;
+  background:linear-gradient(135deg,#7c3cff,#4c168f);
+  cursor:pointer;
+}
+
+.action-btn.secondary{
+  background:rgba(255,255,255,.08);
+  color:#d8ccff;
+}
+
+nav{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:12px;
+  max-width:480px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  align-items:end;
+  background:rgba(14,8,22,.92);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:8px;
+  backdrop-filter:blur(12px);
+  box-shadow:0 12px 36px rgba(0,0,0,.45);
+}
+
+nav button{
+  min-height:50px;
+  border:0;
+  background:transparent;
+  color:#888;
+  text-align:center;
+  font-size:9px;
+  padding:9px 3px;
+  border-radius:14px;
+  text-transform:uppercase;
+  letter-spacing:.2px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+nav button.active{
+  color:#fff;
+  background:rgba(255,255,255,.06);
+}
+
+.dice-active{
+  min-height:66px;
+  background:linear-gradient(180deg,#8d5cff,#4a168c);
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  transform:translateY(-10px);
+  box-shadow:0 8px 24px rgba(124,60,255,.45);
+  border:1px solid rgba(255,255,255,.18);
+  flex-direction:column;
+}
+
+.dice-icon{
+  width:29px;
+  height:29px;
+  display:block;
+  margin:0 auto 2px;
+  fill:none;
+  stroke:white;
+  stroke-width:4;
+  animation:dicePulse 1.8s infinite ease-in-out;
+}
+
+.dice-icon circle{
+  fill:white;
+  stroke:none;
+}
+
+@keyframes dicePulse{
+  0%,100%{transform:rotate(-6deg) scale(1)}
+  50%{transform:rotate(6deg) scale(1.08)}
+}
+
+@media(min-width:420px){
+  .grid{grid-template-columns:1fr 1fr}
+  .field.full{grid-column:1/-1}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <div class="tag">Arquivo de 1999</div>
+  <h1 id="tituloPagina">Características</h1>
+  <div class="subtitle" id="subtituloPagina">Atributos principais sempre à mão.</div>
+  <div id="statusCarregamento" class="status">Carregando ficha do GitHub via API...</div>
+
+  <section id="telaCaracteristicas" class="screen active">
+    <div class="card section">
+      <h3 class="section-title">Características</h3>
+      <div class="widgets" id="widgets"></div>
+
+      <div class="actions">
+        <button class="action-btn" onclick="salvarFichaGithub()">Salvar GitHub</button>
+        <button class="action-btn secondary" onclick="mostrarJSON()">Ver JSON</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="telaFicha" class="screen">
+    <div class="card">
+      <div class="grid" id="dados"></div>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn" onclick="salvarFichaGithub()">Salvar GitHub</button>
+      <button class="action-btn secondary" onclick="mostrarJSON()">Ver JSON</button>
+    </div>
+  </section>
+</div>
+
+<nav>
+  <button id="btnFicha" onclick="abrirTela('ficha')">Ficha</button>
+  <button id="btnCaracteristicas" class="active" onclick="abrirTela('caracteristicas')">Características</button>
+
+  <button class="dice-active" onclick="alert('Tela de rolagem de dados será criada na próxima etapa.')">
+    <svg viewBox="0 0 64 64" class="dice-icon" aria-hidden="true">
+      <rect x="10" y="10" width="44" height="44" rx="10"></rect>
+      <circle cx="24" cy="24" r="4"></circle>
+      <circle cx="40" cy="24" r="4"></circle>
+      <circle cx="32" cy="32" r="4"></circle>
+      <circle cx="24" cy="40" r="4"></circle>
+      <circle cx="40" cy="40" r="4"></circle>
+    </svg>
+    <span>Dados</span>
+  </button>
+
+  <button onclick="alert('Tela de perícias será criada na próxima etapa.')">Perícia</button>
+  <button onclick="alert('Tela de anotações será criada na próxima etapa.')">Anotações</button>
+</nav>
+
+<script>
+const GITHUB_OWNER = "ogabspinho";
+const GITHUB_REPO = "aplicativo_pontos";
+const GITHUB_BRANCH = "main";
+const GITHUB_FILE_PATH = "Lima.JSON";
+const URL_JSON = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_FILE_PATH}`;
+
+/*
+  IMPORTANTE:
+  Cole aqui seu token do GitHub.
+  Para repositório público, crie um Fine-grained token com acesso:
+  Contents: Read and Write
+*/
+const GITHUB_TOKEN = "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";
+
+let ficha = {
+  "nome": "",
+  "jogador": "",
+  "ocupacao": "",
+  "idade": "",
+  "sexo": "",
+  "residencia": "",
+  "nascimento": "",
+  "caracteristicas": [
+    { "tipo": "FOR", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "CON", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "TAM", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "DES", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "APA", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "INT", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "POD", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "EDU", "valor": 0, "metade": 0, "quinto": 0 },
+    { "tipo": "TAXA DE MOV.", "valor": 9 }
+  ]
+};
+
+const campos = [
+  ["jogador","Jogador"],
+  ["nome","Nome"],
+  ["ocupacao","Ocupação"],
+  ["idade","Idade"],
+  ["sexo","Sexo"],
+  ["residencia","Residência"],
+  ["nascimento","Nascimento"]
+];
+
+function setStatus(texto, tipo){
+  const status = document.getElementById("statusCarregamento");
+  status.textContent = texto;
+  status.className = "status " + (tipo || "");
+}
+
+function base64ParaTextoUnicode(base64){
+  const binario = atob(base64.replace(/\n/g, ""));
+  const bytes = new Uint8Array(binario.length);
+
+  for(let i = 0; i < binario.length; i++){
+    bytes[i] = binario.charCodeAt(i);
+  }
+
+  return new TextDecoder("utf-8").decode(bytes);
+}
+
+async function carregarJSONGithub(){
+  setStatus("Carregando ficha do GitHub via API...", "");
+
+  try{
+    /*
+      Em vez de usar raw.githubusercontent.com, usamos a API de Contents.
+      Isso evita o cache agressivo do Raw/CDN do GitHub.
+    */
+    const urlApi = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}&t=${Date.now()}`;
+
+    const resposta = await fetch(urlApi, {
+      cache: "no-store",
+      headers: {
+        "Authorization": `Bearer ${GITHUB_TOKEN}`,
+        "Accept": "application/vnd.github+json"
+      }
+    });
+
+    if(!resposta.ok){
+      throw new Error("HTTP " + resposta.status + " ao acessar o arquivo pela API do GitHub.");
+    }
+
+    const dadosArquivo = await resposta.json();
+    const textoJson = base64ParaTextoUnicode(dadosArquivo.content);
+    const json = JSON.parse(textoJson);
+
+    ficha = normalizarFicha(json);
+
+    renderDados();
+    renderCaracteristicas();
+
+    setStatus("Ficha carregada do GitHub via API.", "ok");
+  }catch(erro){
+    console.error(erro);
+
+    const fichaSalva = localStorage.getItem("fichaInvestigador");
+
+    if(fichaSalva){
+      ficha = normalizarFicha(JSON.parse(fichaSalva));
+      renderDados();
+      renderCaracteristicas();
+      setStatus("Não consegui carregar o GitHub. Usando ficha salva neste celular.", "erro");
+    }else{
+      renderDados();
+      renderCaracteristicas();
+      setStatus("Não consegui carregar o GitHub. Usando ficha vazia padrão.", "erro");
+    }
+  }
+}
+
+function normalizarFicha(json){
+  const base = JSON.parse(JSON.stringify(ficha));
+  const nova = { ...base, ...json };
+
+  if(!Array.isArray(nova.caracteristicas)){
+    nova.caracteristicas = base.caracteristicas;
+  }
+
+  nova.caracteristicas = nova.caracteristicas.map(c => {
+    const item = { ...c };
+
+    if(Object.prototype.hasOwnProperty.call(item, "metade") || Object.prototype.hasOwnProperty.call(item, "quinto")){
+      const valor = parseInt(item.valor) || 0;
+      item.valor = valor;
+      item.metade = Math.floor(valor / 2);
+      item.quinto = Math.floor(valor / 5);
+    }
+
+    return item;
+  });
+
+  return nova;
+}
+
+function abrirTela(tela){
+  const telaFicha = document.getElementById("telaFicha");
+  const telaCaracteristicas = document.getElementById("telaCaracteristicas");
+  const btnFicha = document.getElementById("btnFicha");
+  const btnCaracteristicas = document.getElementById("btnCaracteristicas");
+  const titulo = document.getElementById("tituloPagina");
+  const subtitulo = document.getElementById("subtituloPagina");
+
+  telaFicha.classList.remove("active");
+  telaCaracteristicas.classList.remove("active");
+  btnFicha.classList.remove("active");
+  btnCaracteristicas.classList.remove("active");
+
+  if(tela === "ficha"){
+    telaFicha.classList.add("active");
+    btnFicha.classList.add("active");
+    titulo.textContent = "Ficha";
+    subtitulo.textContent = "Dados do personagem.";
+  }else{
+    telaCaracteristicas.classList.add("active");
+    btnCaracteristicas.classList.add("active");
+    titulo.textContent = "Características";
+    subtitulo.textContent = "Atributos principais sempre à mão.";
+  }
+}
+
+function renderDados(){
+  const dados = document.getElementById("dados");
+  dados.innerHTML = "";
+
+  campos.forEach(campo => {
+    const key = campo[0];
+    const label = campo[1];
+    const full = key === "nome" || key === "residencia" ? "full" : "";
+
+    dados.innerHTML += `
+      <div class="field ${full}">
+        <label>${label}</label>
+        <input value="${ficha[key] || ""}" oninput="ficha['${key}']=this.value">
+      </div>
+    `;
+  });
+}
+
+function renderCaracteristicas(){
+  const widgets = document.getElementById("widgets");
+  widgets.innerHTML = "";
+
+  ficha.caracteristicas.forEach((caracteristica, index) => {
+    const temMetadeEQuinto =
+      Object.prototype.hasOwnProperty.call(caracteristica, "metade") &&
+      Object.prototype.hasOwnProperty.call(caracteristica, "quinto");
+
+    if (temMetadeEQuinto) {
+      widgets.innerHTML += `
+        <div class="widget">
+          <div class="widget-title">${caracteristica.tipo}</div>
+
+          <div class="main">
+            <input type="number" value="${caracteristica.valor}" onchange="atualizarValor(${index}, this.value)">
+          </div>
+
+          <div class="bottom">
+            <div class="small">
+              <label>1/2</label>
+              <input value="${caracteristica.metade}" readonly>
+            </div>
+
+            <div class="small">
+              <label>1/5</label>
+              <input value="${caracteristica.quinto}" readonly>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      widgets.innerHTML += `
+        <div class="widget">
+          <div class="widget-title">${caracteristica.tipo}</div>
+
+          <div class="main">
+            <input type="number" value="${caracteristica.valor}" onchange="atualizarMovimento(${index}, this.value)">
+          </div>
+
+          <div class="mov-controls">
+            <button onclick="alterarMovimento(${index}, -1)">−</button>
+            <button onclick="alterarMovimento(${index}, 1)">+</button>
+          </div>
+        </div>
+      `;
+    }
+  });
+}
+
+function atualizarValor(index, valor){
+  valor = parseInt(valor) || 0;
+
+  ficha.caracteristicas[index].valor = valor;
+  ficha.caracteristicas[index].metade = Math.floor(valor / 2);
+  ficha.caracteristicas[index].quinto = Math.floor(valor / 5);
+
+  renderCaracteristicas();
+}
+
+function atualizarMovimento(index, valor){
+  ficha.caracteristicas[index].valor = parseInt(valor) || 0;
+  renderCaracteristicas();
+}
+
+function alterarMovimento(index, quantidade){
+  ficha.caracteristicas[index].valor = (parseInt(ficha.caracteristicas[index].valor) || 0) + quantidade;
+  renderCaracteristicas();
+}
+
+function salvarFichaLocal(){
+  localStorage.setItem("fichaInvestigador", JSON.stringify(ficha));
+}
+
+function jsonParaBase64Unicode(objeto){
+  const texto = JSON.stringify(objeto, null, 2);
+  const bytes = new TextEncoder().encode(texto);
+  let binario = "";
+
+  bytes.forEach(byte => {
+    binario += String.fromCharCode(byte);
+  });
+
+  return btoa(binario);
+}
+
+async function obterShaArquivoGithub(){
+  const urlApi = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}?ref=${GITHUB_BRANCH}`;
+
+  const resposta = await fetch(urlApi, {
+    headers: {
+      "Authorization": `Bearer ${GITHUB_TOKEN}`,
+      "Accept": "application/vnd.github+json"
+    }
+  });
+
+  if(!resposta.ok){
+    throw new Error("Não consegui obter o SHA atual do arquivo. HTTP " + resposta.status);
+  }
+
+  const dados = await resposta.json();
+  return dados.sha;
+}
+
+async function salvarFichaGithub(){
+  if(!GITHUB_TOKEN || GITHUB_TOKEN === "COLE_SEU_TOKEN_AQUI"){
+    alert("Cole seu token do GitHub na constante GITHUB_TOKEN dentro do HTML.");
+    return;
+  }
+
+  setStatus("Salvando ficha no GitHub...", "");
+
+  try{
+    const shaAtual = await obterShaArquivoGithub();
+
+    const urlApi = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE_PATH}`;
+
+    const payload = {
+      message: `Atualiza ficha ${ficha.nome || GITHUB_FILE_PATH}`,
+      content: jsonParaBase64Unicode(ficha),
+      sha: shaAtual,
+      branch: GITHUB_BRANCH
+    };
+
+    const resposta = await fetch(urlApi, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${GITHUB_TOKEN}`,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if(!resposta.ok){
+      const erroTexto = await resposta.text();
+      throw new Error("Erro ao salvar no GitHub. HTTP " + resposta.status + " - " + erroTexto);
+    }
+
+    salvarFichaLocal();
+    setStatus("Ficha salva no GitHub com sucesso.", "ok");
+    alert("Ficha salva no GitHub com sucesso.");
+  }catch(erro){
+    console.error(erro);
+    salvarFichaLocal();
+    setStatus("Não consegui salvar no GitHub. Salvei uma cópia local neste celular.", "erro");
+    alert("Erro ao salvar no GitHub. Veja o console do navegador para detalhes.");
+  }
+}
+
+function mostrarJSON(){
+  console.log(JSON.stringify(ficha, null, 2));
+  alert("JSON atualizado enviado para o console do navegador.");
+}
+
+carregarJSONGithub();
+</script>
+</body>
+</html>
